@@ -1,2 +1,2 @@
 # KMaP---Documents-upload
-Python code for massive upload of documents on Geonode and update of abstract
+This document is python code for massive upload of documents on GeoNode using login session
