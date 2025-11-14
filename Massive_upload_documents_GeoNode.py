@@ -18,7 +18,7 @@ import json
 GEONODE_URL = "https://kmap.info-rac.org" #<--  write your geonode instance
 USERNAME = "user"         # <-- write your user. N.B. the user will be the owner of the document
 PASSWORD = "password"     # <-- write your password
-CSV_PATH = r"C:\Users\berna\OneDrive - ISPRA\INFO-RAC\KM platform\update_wedocs_library_12112025_test.csv" # <-- location of your CSV file withe the list of documents. 
+CSV_PATH = r"C:\path\myfile.csv" # <-- location of your CSV file withe the list of documents. 
 #The file should be structured with the following columns: 'title', 'date', 'lang', 'url'
 owner = USERNAME
  
@@ -63,7 +63,7 @@ with open(CSV_PATH, encoding="utf-8-sig") as f:
         date= row.get("date", "")
 
 
-        abstract_raw = f"{title} \nDomain:{owner}  - Year:{date}"
+        abstract_raw = f"{title} \n --- Domain: {owner}  - Year: {date} - Language: {lang}"
         abstract_text = str(abstract_raw or "").strip().replace("\\n", "\n")
 
         if not title or not url:
@@ -106,7 +106,8 @@ with open(CSV_PATH, encoding="utf-8-sig") as f:
             })
             
             payload = {
-                "abstract": abstract_text
+                "abstract": abstract_text,
+                "language": lang.lower(),
             }
             
             r = session.patch(update_url, data=json.dumps(payload), headers=headers)
@@ -119,4 +120,5 @@ with open(CSV_PATH, encoding="utf-8-sig") as f:
 
         else:
             print(f"❌ Riga {i}: errore {r.status_code} → {r.text[:500]}")
+
 
