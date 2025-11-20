@@ -96,6 +96,13 @@ with open(CSV_PATH, encoding="utf-8-sig") as f:
             m = re.search(r'/document/(\d+)', doc_url)
             doc_id = m.group(1) if m else None
             print("✅ Document created with ID:", doc_id)
+         
+            uploaded_docs.append({
+                "title": title,
+                "doc_id": doc_id,
+                "url": doc_url,
+                "year": date
+            })
             
 # 5 Update the abstract
 #---------------------------------
@@ -104,10 +111,13 @@ with open(CSV_PATH, encoding="utf-8-sig") as f:
                 "X-CSRFToken": session.cookies.get("csrftoken"),
                 "Content-Type": "application/json"
             })
-            
+         
+            raw_lang = (lang or "").lower().strip()            # if there are multilanguages es. "eng,fra,spa"....
+            first_lang = raw_lang.split(",")[0].strip()         # it takes the first one → "eng"
+         
             payload = {
                 "abstract": abstract_text,
-                "language": lang.lower(),
+                "language": first_lang.lower(),
             }
             
             r = session.patch(update_url, data=json.dumps(payload), headers=headers)
@@ -121,4 +131,10 @@ with open(CSV_PATH, encoding="utf-8-sig") as f:
         else:
             print(f"❌ Riga {i}: errore {r.status_code} → {r.text[:500]}")
 
+# 6 Export the list of ID into excel
+df = pd.DataFrame(uploaded_docs)
+output_path = "document_upload_id.xlsx"
+df.to_excel(output_path, index=False)
+
+print("📁 File Excel created:", output_path)
 
