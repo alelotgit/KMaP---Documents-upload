@@ -15,7 +15,7 @@ import re
 import json
 
  
-GEONODE_URL = "https://kmap.info-rac.org" #<--  write your geonode instance
+GEONODE_URL = "https://geonodewebsite.com" #<--  write your geonode instance
 USERNAME = "user"         # <-- write your user. N.B. the user will be the owner of the document
 PASSWORD = "password"     # <-- write your password
 CSV_PATH = r"C:\path\myfile.csv" # <-- location of your CSV file withe the list of documents. 
@@ -137,4 +137,5 @@ output_path = "document_upload_id.xlsx"
 df.to_excel(output_path, index=False)
 
 print("📁 File Excel created:", output_path)
+
 
